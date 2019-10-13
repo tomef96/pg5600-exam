@@ -85,6 +85,7 @@ struct AlbumList: View {
             Button(action: { self.setViewMode(viewMode: ViewMode.big) }) {
                 Image(systemName: "square.grid.2x2.fill").resizable().frame(width: 20, height: 20, alignment: .center).padding(.horizontal, 5)
             }
+            Spacer()
         }
     }
 }
@@ -95,10 +96,14 @@ struct AlbumList_Previews: PreviewProvider {
         Album(id: "1", name: "Jumbo", artist: "Queer"),
         Album(id: "2", name: "Enter Sandman", artist: "Metallica"),
         Album(id: "3", name: "Happy", artist: "Pharell"),
+        Album(id: "4", name: "Sad", artist: "LLerahp"),
+        Album(id: "1", name: "Jumbo", artist: "Queer"),
+        Album(id: "2", name: "Enter Sandman", artist: "Metallica"),
+        Album(id: "3", name: "Happy", artist: "Pharell"),
         Album(id: "4", name: "Sad", artist: "LLerahp")
     ]
     
     static var previews: some View {
-        AlbumList(viewModel: .init(withTestData: testAlbums))
+        AlbumList(viewModel: .init(withTestData: testAlbums)).environment(\.colorScheme, .dark)
     }
 }

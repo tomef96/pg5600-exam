@@ -43,6 +43,10 @@ struct RecommendationList_Previews: PreviewProvider {
         Artist(withName: "Queen"),
         Artist(withName: "Korn"),
         Artist(withName: "Muse"),
+        Artist(withName: "Queen"),
+        Artist(withName: "Queen"),
+        Artist(withName: "Korn"),
+        Artist(withName: "Muse"),
         Artist(withName: "Queen")
     ]
     
