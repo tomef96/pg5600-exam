@@ -23,7 +23,7 @@ struct AlbumRow: View {
 
 struct AlbumRow_Previews: PreviewProvider {
     static var previews: some View {
-        AlbumRow(viewModel: .init(album: Album(id: "1", name: "Jumbo", artist: "Queer"))).environment(\.colorScheme, .dark)
+        AlbumRow(viewModel: .init(album: Album(id: "1", name: "Jumbo", artist: "Queer"), image: Image(uiImage: UIImage(named: "testImage")!))).environment(\.colorScheme, .dark)
     }
 }
 

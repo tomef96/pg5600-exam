@@ -16,14 +16,19 @@ class AlbumViewModel: ObservableObject {
 
     init(album: Album) {
         self.album = album
-        AlbumViewModel.downloadImage(from: URL(string: album.thumbnailUrl)!) { image in
+        downloadImage(from: URL(string: album.thumbnailUrl)!) { image in
             DispatchQueue.main.async {
                 self.image = Image(uiImage: image)
             }
         }
     }
     
-    static func downloadImage(from url: URL, callback: @escaping (UIImage) -> Void) {
+    init(album: Album, image: Image) {
+        self.album = album
+        self.image = image
+    }
+    
+    func downloadImage(from url: URL, callback: @escaping (UIImage) -> Void) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else { return }
             guard let uiImage = UIImage(data: data) else { return }

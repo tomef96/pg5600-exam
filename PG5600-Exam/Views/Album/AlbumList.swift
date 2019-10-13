@@ -14,17 +14,6 @@ struct AlbumList: View {
     
     @ObservedObject var viewModel: AlbumListViewModel
         
-    func coupleAlbums() -> [[Album]] {
-        var result: [[Album]] = []
-        for i in 0...viewModel.albums.count-1 {
-            if i % 2 == 0  {
-                let couple = [viewModel.albums[i], viewModel.albums[i+1]]
-                result.append(couple)
-            }
-        }
-        return result
-    }
-    
     func setViewMode(viewMode: ViewMode) {
         self.viewMode = viewMode
     }
@@ -36,45 +25,22 @@ struct AlbumList: View {
     
     var body: some View {
         NavigationView {
-            if $viewMode.wrappedValue == ViewMode.big {
-                ScrollView(.vertical, showsIndicators: true) {
-                    VStack {
-                        if viewModel.albums.count > 0 {
-                            collectionView
-                        } else {
-                            Text("Loading").padding()
+            VStack {
+                if $viewMode.wrappedValue == ViewMode.big {
+                    AlbumCollectionList(viewModel: viewModel)
+                } else {
+                    List(viewModel.albums) { album in
+                        NavigationLink(destination: AlbumDetail(viewModel: .init(album: album))) {
+                            HStack {
+                                Text(album.name).font(.headline)
+                                Spacer()
+                                Text(album.artist).font(.subheadline)
+                            }
                         }
                     }
-                    }.navigationBarTitle("Top 50 Albums").navigationBarItems(trailing: navigationItems)
-            } else {
-                List(viewModel.albums) { album in
-                    NavigationLink(destination: AlbumDetail(viewModel: .init(album: album))) {
-                        HStack {
-                            Text(album.name).font(.headline)
-                            Spacer()
-                            Text(album.artist).font(.subheadline)
-                        }
-                    }
-                    }.navigationBarTitle("Top 50 Albums").navigationBarItems(trailing: navigationItems)
-            }
-
+                }
+            }.navigationBarTitle("Top 50 Albums").navigationBarItems(trailing: navigationItems)
         }
-    }
-    
-    var collectionView: some View {
-        ForEach(coupleAlbums(), id: \.[0].id) { albums in
-            HStack {
-                Spacer()
-                NavigationLink(destination: AlbumDetail(viewModel: .init(album: albums[0]))) {
-                    AlbumRow(viewModel: .init(album: albums[0]))
-                }.buttonStyle(PlainButtonStyle())
-                Spacer()
-                NavigationLink(destination: AlbumDetail(viewModel: .init(album: albums[1]))) {
-                    AlbumRow(viewModel: .init(album: albums[1]))
-                }.buttonStyle(PlainButtonStyle())
-                Spacer()
-            }
-        }.padding(.top, 20)
     }
     
     var navigationItems: some View {

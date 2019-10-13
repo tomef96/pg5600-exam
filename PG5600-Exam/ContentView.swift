@@ -27,7 +27,6 @@ struct ContentView: View {
                 Text("Favorites")
             })
         }
-        //CollectionView()
     }
 }
 

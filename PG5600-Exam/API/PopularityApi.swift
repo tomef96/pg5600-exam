@@ -10,42 +10,37 @@ import Foundation
 
 class PopularityApi {
             
-    static func getTopFiftyTracksOfAllTime(callback: @escaping ([Track]) -> Void) {
-        let apiUrl = URL(string: "https://theaudiodb.com/api/v1/json/1/mostloved.php?format=track")!
-        URLSession.shared.dataTask(with: apiUrl) {data, response, error in
+    static func apiGetArray<T: Decodable>(url: URL, callback: @escaping ([T]) -> Void) {
+        URLSession.shared.dataTask(with: url) {data, response, error in
             if let error = error {print(error)}
             guard let data = data else {return}
-            let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-            let loved = json["loved"] as! [AnyObject]
             
-            var result: [Track] = []
+            let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
+            
+            let loved = json["loved"] as! [AnyObject] // Customizable??
+            
+            var result: [T] = []
             for t in loved {
                 let dataTrack = t as! [String: Any]
                 let jsonTrack = try! JSONSerialization.data(withJSONObject: dataTrack, options: .fragmentsAllowed)
-                let track = try! JSONDecoder().decode(Track.self, from: jsonTrack)
-                result.append(track)
-            }            
-            callback(result)
-        }.resume()
-    }
-    
-    static func getTopFiftyAlbumsOfAllTime(callback: @escaping ([Album]) -> Void) {
-        print("Fetching albums")
-        let apiUrl = URL(string: "https://theaudiodb.com/api/v1/json/1/mostloved.php?format=album")!
-        URLSession.shared.dataTask(with: apiUrl) {data, response, error in
-            if let error = error {print(error)}
-            guard let data = data else {return}
-            let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-            let loved = json["loved"] as! [AnyObject]
-            
-            var result: [Album] = []
-            for t in loved {
-                let dataTrack = t as! [String: Any]
-                let jsonTrack = try! JSONSerialization.data(withJSONObject: dataTrack, options: .fragmentsAllowed)
-                let track = try! JSONDecoder().decode(Album.self, from: jsonTrack)
+                let track = try! JSONDecoder().decode(T.self, from: jsonTrack)
                 result.append(track)
             }
             callback(result)
         }.resume()
+    }
+    
+    static func getTopFiftyTracksOfAllTime(callback: @escaping ([Track]) -> Void) {
+        let url = URL(string: "https://theaudiodb.com/api/v1/json/1/mostloved.php?format=track")!
+        apiGetArray(url: url) { tracks in
+            callback(tracks)
+        }
+    }
+    
+    static func getTopFiftyAlbumsOfAllTime(callback: @escaping ([Album]) -> Void) {
+        let url = URL(string: "https://theaudiodb.com/api/v1/json/1/mostloved.php?format=album")!
+        apiGetArray(url: url) { albums in
+            callback(albums)
+        }
     }
 }
