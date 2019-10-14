@@ -23,17 +23,27 @@ struct RecommendationList: View {
             Text("Recommended artists").font(.headline).animation(animation).transition(.slide).padding(.horizontal)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
+                    listPadding
                     ForEach(viewModel.recommendations) { artist in
-                        Text(artist.name)
-                            .padding()
-                            .frame(width: 100, height: 100)
+                        VStack {
+                            Text(artist.name)
+                                .frame(width: 125, height: 100)
                             .foregroundColor(Color(UIColor(named: "recommendationColor")!))
                             .colorInvert()
                             .background(Color(UIColor(named: "recommendationColor")!))
+                        }.padding(.leading, 5)
+                        
                     }
+                    listPadding
                 }
             }.transition(.slide).animation(animation)
         }.padding(.vertical)
+    }
+    
+    var listPadding: some View {
+        VStack {
+            Text("")
+        }.frame(width: 10, height: 0)
     }
 }
 

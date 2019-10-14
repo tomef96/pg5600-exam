@@ -8,38 +8,18 @@
 
 import Foundation
 
-class PopularityApi {
+class PopularityApi: Api {
             
-    static func apiGetArray<T: Decodable>(url: URL, callback: @escaping ([T]) -> Void) {
-        URLSession.shared.dataTask(with: url) {data, response, error in
-            if let error = error {print(error)}
-            guard let data = data else {return}
-            
-            let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-            
-            let loved = json["loved"] as! [AnyObject] // Customizable??
-            
-            var result: [T] = []
-            for t in loved {
-                let dataTrack = t as! [String: Any]
-                let jsonTrack = try! JSONSerialization.data(withJSONObject: dataTrack, options: .fragmentsAllowed)
-                let track = try! JSONDecoder().decode(T.self, from: jsonTrack)
-                result.append(track)
-            }
-            callback(result)
-        }.resume()
-    }
-    
     static func getTopFiftyTracksOfAllTime(callback: @escaping ([Track]) -> Void) {
         let url = URL(string: "https://theaudiodb.com/api/v1/json/1/mostloved.php?format=track")!
-        apiGetArray(url: url) { tracks in
+        apiGetArray(url: url, subpath: ["loved"]) { tracks in
             callback(tracks)
         }
     }
     
     static func getTopFiftyAlbumsOfAllTime(callback: @escaping ([Album]) -> Void) {
         let url = URL(string: "https://theaudiodb.com/api/v1/json/1/mostloved.php?format=album")!
-        apiGetArray(url: url) { albums in
+        apiGetArray(url: url, subpath: ["loved"]) { albums in
             callback(albums)
         }
     }

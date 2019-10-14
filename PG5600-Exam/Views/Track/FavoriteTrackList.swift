@@ -23,6 +23,11 @@ struct FavoriteTrackList: View {
         for index in offsets {
             let track = tracks[index]
             managedObjectContext.delete(track)
+            do {
+                try managedObjectContext.save()
+            } catch {
+                print("Could not save changes: \(error)")
+            }
         }
     }
     
@@ -40,12 +45,16 @@ struct FavoriteTrackList: View {
                         Text(track.duration ?? "Something went wrong")
                     }
                 }.onDelete(perform: removeTrackFromFavorites)
-                
             }
             Spacer()
-            RecommendationList(viewModel: .init())
+            
+            RecommendationList(viewModel: .init(basedOn: tracks.map({ track in return track })))
+            
         }
-        
+    }
+    
+    var recommendation: some View {
+        RecommendationList(viewModel: .init(basedOn: tracks.map({ track in return track })))
     }
 }
 

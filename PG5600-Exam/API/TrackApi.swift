@@ -8,24 +8,12 @@
 
 import Foundation
 
-class TrackApi {
+class TrackApi: Api {
     static func getTracksFrom(album: String, callback: @escaping ([Track]) -> Void) {
         let url = URL(string: "https://theaudiodb.com/api/v1/json/1/track.php?m=\(album)")!
-        URLSession.shared.dataTask(with: url) {data, response, error in
-            if let error = error {print(error)}
-            guard let data = data else {return}
-            let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-            let tracks = json["track"] as! [AnyObject]
-            
-            var result: [Track] = []
-            for t in tracks {
-                let dataTrack = t as! [String: Any]
-                let jsonTrack = try! JSONSerialization.data(withJSONObject: dataTrack, options: .fragmentsAllowed)
-                let track = try! JSONDecoder().decode(Track.self, from: jsonTrack)
-                result.append(track)
-            }
-            callback(result)
-        }.resume()
+        apiGetArray(url: url, subpath: ["track"]) { tracks in
+            callback(tracks)
+        }
     }
 }
 

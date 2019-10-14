@@ -12,8 +12,13 @@ class RecommendationListViewModel: ObservableObject {
     
     @Published var recommendations: [Artist] = []
     
-    init() {
-        RecommendationApi.getRecommendations(query: "Michael Jackson") { artists in
+    init(basedOn tracks: [FavoriteTrack]) {
+        var query = ""
+        for track in tracks {
+            if let artist = track.artist { if !query.contains(artist) { query += "\(artist)," } }
+        }
+        print(query)
+        RecommendationApi.getRecommendations(query: query) { artists in
             DispatchQueue.main.async {
                 self.recommendations = artists
             }

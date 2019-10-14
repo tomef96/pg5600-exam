@@ -8,30 +8,15 @@
 
 import Foundation
 
-class RecommendationApi {
+class RecommendationApi: Api {
     
     static let key = "347809-PG5600Ex-Z9MHCQUU"
     
     static func getRecommendations(query: String, callback: @escaping ([Artist]) -> Void) {
         let searchQuery = query.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
         let url = URL(string: "https://tastedive.com/api/similar?k=\(key)&type=music&q=\(searchQuery)")!
-        print(url)
-        URLSession.shared.dataTask(with: url) {data, response, error in
-            if let error = error {print(error)}
-            guard let data = data else {return}
-            let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-            print(json)
-            let similar = json["Similar"] as! [String: AnyObject]
-            let artists = similar["Results"] as! [AnyObject]
-            
-            var result: [Artist] = []
-            for a in artists {
-                let dataTrack = a as! [String: Any]
-                let jsonTrack = try! JSONSerialization.data(withJSONObject: dataTrack, options: .fragmentsAllowed)
-                let artist = try! JSONDecoder().decode(Artist.self, from: jsonTrack)
-                result.append(artist)
-            }
-            callback(result)
-        }.resume()
+        apiGetArray(url: url, subpath: ["Similar", "Results"]) { artists in
+            callback(artists)
+        }
     }
 }

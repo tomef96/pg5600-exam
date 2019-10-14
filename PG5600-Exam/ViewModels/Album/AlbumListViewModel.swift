@@ -34,8 +34,8 @@ class AlbumListViewModel: ObservableObject {
         self.isSearch = isSearch
     }
     
-    func searchForAlbums(search: String) {
-        AlbumApi.searchForAlbum(album: search) { albums in
+    func searchForAlbums(album: String) {
+        AlbumApi.search(for: album) { albums in
            DispatchQueue.main.async {
                self.albums = albums
            }

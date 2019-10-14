@@ -18,7 +18,7 @@ struct AlbumSearchList: View {
         NavigationView {
             VStack {
                 SearchBar(text: $searchString, onSearch: {
-                    self.viewModel.searchForAlbums(search: self.searchString)
+                    self.viewModel.searchForAlbums(album: self.searchString)
                 })
                 AlbumCollectionList(viewModel: viewModel)
             }.navigationBarTitle("Search")
