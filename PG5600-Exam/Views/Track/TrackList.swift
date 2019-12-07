@@ -14,6 +14,8 @@ struct TrackList: View {
 
     @ObservedObject var viewModel: TrackListViewModel
     
+    @State var showAlert: Bool = false
+    
     func favoriteTrack(track: Track) {
         let trackEntity = FavoriteTrack(context: self.managedObjectContext)
         trackEntity.trackID = Int32(track.id)!
@@ -32,10 +34,13 @@ struct TrackList: View {
             Text("Tracks").font(.headline).padding(.vertical)
             VStack {
                 ForEach(viewModel.tracks) { track in
-                    Button(action: {self.favoriteTrack(track: track)}) {
+                    Button(action: {
+                        self.favoriteTrack(track: track)
+                        self.showAlert = true
+                    }) {
                         TrackRow(track: track)
-                    }
-            }
+                    }.alert(isPresented: self.$showAlert, content: { Alert(title: Text("Added to Favorites")) })
+                }
             }.border(Color.black, width: 1)
         }
         

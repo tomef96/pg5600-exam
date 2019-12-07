@@ -19,7 +19,7 @@ class Api {
             var target: [AnyObject] = []
             
             if subpath.count == 1 {
-                target = json[subpath[0]] as! [AnyObject]
+                target = json[subpath[0]] as? [AnyObject] ?? []
             } else {
                 var prevPath: [String: AnyObject] = [:]
                 for i in 0...subpath.count-1 {
