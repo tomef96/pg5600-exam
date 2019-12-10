@@ -20,7 +20,12 @@ struct AlbumSearchList: View {
                 SearchBar(text: $searchString, onSearch: {
                     self.viewModel.searchForAlbums(album: self.searchString)
                 })
-                AlbumCollectionList(viewModel: viewModel)
+                Spacer()
+                if viewModel.loading {
+                    Text("Loading")
+                } else {
+                    AlbumCollectionList(viewModel: viewModel)
+                }
             }.navigationBarTitle("Search")
         }
     }

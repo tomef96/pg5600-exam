@@ -635,6 +635,7 @@
 				DEVELOPMENT_TEAM = GNR9TUGZ4M;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "PG5600-Exam/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -655,6 +656,7 @@
 				DEVELOPMENT_TEAM = GNR9TUGZ4M;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "PG5600-Exam/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

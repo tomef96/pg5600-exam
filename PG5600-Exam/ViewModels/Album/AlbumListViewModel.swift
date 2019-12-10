@@ -10,6 +10,7 @@ import SwiftUI
 
 class AlbumListViewModel: ObservableObject {
     
+    @Published var loading = true
     @Published var albums: [Album] = []
     @Published var images: [String: Image] = Dictionary()
     
@@ -19,6 +20,7 @@ class AlbumListViewModel: ObservableObject {
         PopularityApi.getTopFiftyAlbumsOfAllTime() { albums in
             DispatchQueue.main.async {
                 self.albums = albums
+                self.loading = false
             }
             for album in albums {
                 self.downloadImage(from: URL(string: album.thumbnailUrl)!) { image in
@@ -35,9 +37,11 @@ class AlbumListViewModel: ObservableObject {
     }
     
     func searchForAlbums(album: String) {
+        loading = true
         AlbumApi.search(for: album) { albums in
            DispatchQueue.main.async {
                self.albums = albums
+            self.loading = false
            }
         }
     }

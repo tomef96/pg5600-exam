@@ -26,7 +26,10 @@ struct AlbumList: View {
     var body: some View {
         NavigationView {
             VStack {
-                if $viewMode.wrappedValue == ViewMode.big {
+                if viewModel.albums.isEmpty {
+                    Text("Loading")
+                }
+                else if $viewMode.wrappedValue == ViewMode.big {
                     AlbumCollectionList(viewModel: viewModel)
                 } else {
                     List(viewModel.albums) { album in

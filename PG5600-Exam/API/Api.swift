@@ -18,6 +18,7 @@ class Api {
             
             var target: [AnyObject] = []
             
+            // Find the wanted property of the json response
             if subpath.count == 1 {
                 target = json[subpath[0]] as? [AnyObject] ?? []
             } else {
